@@ -3,11 +3,15 @@ import 'dart:math';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
+import 'package:fluttergamefly/componentes/agile-fly.dart';
 import 'package:fluttergamefly/componentes/backyard.dart';
+import 'package:fluttergamefly/componentes/drooler-fly.dart';
 import 'dart:ui';
 
 import 'package:fluttergamefly/componentes/fly.dart';
 import 'package:fluttergamefly/componentes/house-fly.dart';
+import 'package:fluttergamefly/componentes/hungry-fly.dart';
+import 'package:fluttergamefly/componentes/macho-fly.dart';
 
 class GameLoop extends Game {
   Size screenSize;
@@ -33,7 +37,25 @@ class GameLoop extends Game {
     double x = rnd.nextDouble() * (screenSize.width - tileSize);
     double y = rnd.nextDouble() * (screenSize.height - tileSize);
 
-    flies.add(HouseFly(this, x, y));
+    switch(rnd.nextInt(5)){
+      case 0:
+        flies.add(AgileFly(this, x, y));
+        break;
+      case 1:
+        flies.add(DroolerFly(this, x, y));
+        break;
+      case 2:
+        flies.add(HouseFly(this, x, y));
+        break;
+      case 3:
+        flies.add(HungryFly(this, x, y));
+        break;
+      case 4:
+        flies.add(MachoFly(this, x, y));
+        break;
+    }
+
+
   }
 
   void render(Canvas canvas) {
