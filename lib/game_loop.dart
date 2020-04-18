@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
+import 'package:fluttergamefly/componentes/backyard.dart';
 import 'dart:ui';
 
 import 'package:fluttergamefly/componentes/fly.dart';
@@ -12,6 +13,7 @@ class GameLoop extends Game {
   double tileSize;
   List<Fly> flies;
   Random rnd;
+  Backyard backyard;
 
   GameLoop(){
     initialize();
@@ -22,6 +24,7 @@ class GameLoop extends Game {
     rnd = Random();
     resize(await Flame.util.initialDimensions());
 
+    backyard = Backyard(this);
     spawnFly();
   }
 
@@ -33,11 +36,8 @@ class GameLoop extends Game {
   }
 
   void render(Canvas canvas) {
-    Rect bgRect = Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
-    Paint bgPaint = Paint();
-    bgPaint.color = Color(0xff576574);
-    canvas.drawRect(bgRect, bgPaint);
-
+    backyard.render(canvas);
+  
     flies.forEach((fly) {
       fly.render(canvas);
     });
