@@ -7,6 +7,7 @@ import 'package:fluttergamefly/componentes/backyard.dart';
 import 'dart:ui';
 
 import 'package:fluttergamefly/componentes/fly.dart';
+import 'package:fluttergamefly/componentes/house-fly.dart';
 
 class GameLoop extends Game {
   Size screenSize;
@@ -32,7 +33,7 @@ class GameLoop extends Game {
     double x = rnd.nextDouble() * (screenSize.width - tileSize);
     double y = rnd.nextDouble() * (screenSize.height - tileSize);
 
-    flies.add(Fly(this, x, y));
+    flies.add(HouseFly(this, x, y));
   }
 
   void render(Canvas canvas) {
