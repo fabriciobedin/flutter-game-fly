@@ -13,8 +13,18 @@ class Fly {
   Sprite deadSprite;
   double flyingSpriteIndex = 0;
 
-  Fly(this.gameLoop, double x, double y){
-    flyRect = Rect.fromLTWH(x, y, gameLoop.tileSize, gameLoop.tileSize);
+  double get speed => gameLoop.tileSize * 3;
+
+  Offset targetLocation;
+
+  Fly(this.gameLoop){
+    setTargetLocation();
+  }
+
+  void setTargetLocation(){
+    double x = gameLoop.rnd.nextDouble() * (gameLoop.screenSize.width - (gameLoop.tileSize * 2.0));
+    double y = gameLoop.rnd.nextDouble() * (gameLoop.screenSize.height - (gameLoop.tileSize * 2.0));
+    targetLocation = Offset(x, y);
   }
 
   void render(Canvas canvas){
@@ -34,7 +44,17 @@ class Fly {
     } else {
       flyingSpriteIndex += 30 * time;
       if(flyingSpriteIndex >= flyingSprite.length){
-        flyingSpriteIndex -= flyingSprite.length;
+        flyingSpriteIndex -= flyingSpriteIndex.toInt();
+      }
+
+      double stepDistance = speed * time;
+      Offset toTarget = targetLocation - Offset(flyRect.left, flyRect.top);
+      if (stepDistance < toTarget.distance) {
+        Offset stepToTarget = Offset.fromDirection(toTarget.direction, stepDistance);
+        flyRect = flyRect.shift(stepToTarget);
+      } else {
+        flyRect = flyRect.shift(toTarget);
+        setTargetLocation();
       }
     }
   }

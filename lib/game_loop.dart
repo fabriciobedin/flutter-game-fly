@@ -34,8 +34,8 @@ class GameLoop extends Game {
   }
 
   void spawnFly() {
-    double x = rnd.nextDouble() * (screenSize.width - tileSize);
-    double y = rnd.nextDouble() * (screenSize.height - tileSize);
+    double x = rnd.nextDouble() * (screenSize.width - (tileSize * 2.0));
+    double y = rnd.nextDouble() * (screenSize.height - (tileSize * 2.0));
 
     switch(rnd.nextInt(5)){
       case 0:
@@ -80,7 +80,7 @@ class GameLoop extends Game {
 
   void onTapDown(TapDownDetails details) {
     flies.forEach((fly) {
-      if (fly.flyRect.contains(details.globalPosition)){
+      if (fly.flyRect.contains(details.globalPosition) && !fly.isDead){
         fly.onTapDown();
         spawnFly();
       }
