@@ -6,14 +6,11 @@ import 'package:flutter/gestures.dart';
 import 'dart:ui';
 
 import 'package:fluttergamefly/componentes/fly.dart';
-import 'package:fluttergamefly/componentes/racket.dart';
 
 class GameLoop extends Game {
   Size screenSize;
   double tileSize;
   List<Fly> flies;
-  List<Racket> leftRacket;
-  List<Racket> rightRacket;
   Random rnd;
 
   GameLoop(){
@@ -22,19 +19,11 @@ class GameLoop extends Game {
 
   void initialize() async {
     flies = List<Fly>();
-//    leftRacket = List<Racket>();
-//    rightRacket = List<Racket>();
     rnd = Random();
     resize(await Flame.util.initialDimensions());
 
     spawnFly();
-//    loadRackets();
   }
-
-//  void loadRackets(){
-//    leftRacket.add(Racket(this, 0, 500));
-//    rightRacket.add(Racket(this, (screenSize.width - tileSize / 2), 50));
-//  }
 
   void spawnFly() {
     double x = rnd.nextDouble() * (screenSize.width - tileSize);
@@ -49,14 +38,6 @@ class GameLoop extends Game {
     bgPaint.color = Color(0xff576574);
     canvas.drawRect(bgRect, bgPaint);
 
-//    leftRacket.forEach((leftRacket) {
-//      leftRacket.render(canvas);
-//    });
-//
-//    rightRacket.forEach((rightRacket) {
-//      rightRacket.render(canvas);
-//    });
-
     flies.forEach((fly) {
       fly.render(canvas);
     });
@@ -67,14 +48,6 @@ class GameLoop extends Game {
     flies.forEach((fly) {
       fly.update(t);
     });
-
-//    leftRacket.forEach((leftRacket) {
-//      leftRacket.update(t);
-//    });
-//
-//    rightRacket.forEach((rightRacket) {
-//      rightRacket.update(t);
-//    });
   }
 
   void resize(Size size) {
