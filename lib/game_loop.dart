@@ -12,13 +12,24 @@ import 'package:fluttergamefly/componentes/fly.dart';
 import 'package:fluttergamefly/componentes/house-fly.dart';
 import 'package:fluttergamefly/componentes/hungry-fly.dart';
 import 'package:fluttergamefly/componentes/macho-fly.dart';
+import 'package:fluttergamefly/componentes/start-button.dart';
+import 'package:fluttergamefly/controllers/spawner.dart';
+import 'package:fluttergamefly/view.dart';
+import 'package:fluttergamefly/view/home-view.dart';
+import 'package:fluttergamefly/view/lost-view.dart';
 
 class GameLoop extends Game {
+  View activeView = View.home;
   Size screenSize;
   double tileSize;
   List<Fly> flies;
   Random rnd;
   Backyard backyard;
+  HomeView homeView;
+  StartButton startButton;
+  LostView lostView;
+
+  FlySpawner spawner;
 
   GameLoop(){
     initialize();
@@ -29,8 +40,11 @@ class GameLoop extends Game {
     rnd = Random();
     resize(await Flame.util.initialDimensions());
 
+    spawner = FlySpawner(this);
+    homeView = HomeView(this);
     backyard = Backyard(this);
-    spawnFly();
+    startButton = StartButton(this);
+    lostView = LostView(this);
   }
 
   void spawnFly() {
@@ -54,23 +68,31 @@ class GameLoop extends Game {
         flies.add(MachoFly(this, x, y));
         break;
     }
-
-
   }
 
   void render(Canvas canvas) {
+
     backyard.render(canvas);
-  
+
     flies.forEach((fly) {
       fly.render(canvas);
     });
 
+    if (activeView == View.home) homeView.render(canvas);
+    if (activeView == View.lost) lostView.render(canvas);
+    if (activeView == View.home || activeView == View.lost) {
+      startButton.render(canvas);
+    }
   }
 
   void update(double t){
+    spawner.update(t);
+
     flies.forEach((fly) {
       fly.update(t);
     });
+
+    flies.removeWhere((fly) => fly.isOffScreen);
   }
 
   void resize(Size size) {
@@ -79,13 +101,24 @@ class GameLoop extends Game {
   }
 
   void onTapDown(TapDownDetails details) {
-    flies.forEach((fly) {
+    if (startButton.rect.contains(details.globalPosition)) {
+      if (activeView == View.home || activeView == View.lost) {
+        startButton.onTapDown();
+        return;
+      }
+    }
+
+    bool didHitAFly = false;
+    List<Fly>.from(flies).forEach((fly) {
       if (fly.flyRect.contains(details.globalPosition) && !fly.isDead){
         fly.onTapDown();
-        spawnFly();
+        didHitAFly = true;
+        return;
       }
     });
 
-    flies.removeWhere((fly) => fly.isOffScreen);
+    if (activeView == View.playing && !didHitAFly) {
+      activeView = View.lost;
+    }
   }
 }
