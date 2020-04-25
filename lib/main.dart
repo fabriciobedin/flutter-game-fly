@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttergamefly/game_loop.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +44,9 @@ void main() async {
     'ui/icon-sound-disabled.png'
   ]);
 
-  GameLoop gameLoop = GameLoop();
+  SharedPreferences storage = await SharedPreferences.getInstance();
+
+  GameLoop gameLoop = GameLoop(storage);
   runApp(gameLoop.widget);
 
   TapGestureRecognizer tapper = TapGestureRecognizer();

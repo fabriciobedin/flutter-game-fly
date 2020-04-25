@@ -34,7 +34,7 @@ class Callout {
 
   void update(double t) {
     if (fly.gameLoop.activeView == View.playing) {
-      value = value - .25 * t;
+      value = value - .1 * t;
       if (value <= 0) {
         fly.gameLoop.activeView = View.lost;
       }
@@ -48,7 +48,7 @@ class Callout {
     );
 
     tp.text = TextSpan(
-      text: (value * 50).toInt().toString(),
+      text: (value * 10).toInt().toString(),
       style: textStyle,
     );
     tp.layout();

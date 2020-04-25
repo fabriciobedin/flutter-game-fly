@@ -11,6 +11,7 @@ import 'dart:ui';
 
 import 'package:fluttergamefly/componentes/fly.dart';
 import 'package:fluttergamefly/componentes/help-button.dart';
+import 'package:fluttergamefly/componentes/highscore-display.dart';
 import 'package:fluttergamefly/componentes/house-fly.dart';
 import 'package:fluttergamefly/componentes/hungry-fly.dart';
 import 'package:fluttergamefly/componentes/macho-fly.dart';
@@ -22,6 +23,7 @@ import 'package:fluttergamefly/view/credits-view.dart';
 import 'package:fluttergamefly/view/help-view.dart';
 import 'package:fluttergamefly/view/home-view.dart';
 import 'package:fluttergamefly/view/lost-view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GameLoop extends Game {
   View activeView = View.home;
@@ -41,13 +43,15 @@ class GameLoop extends Game {
   HelpButton helpButton;
   CreditsButton creditsButton;
   ScoreDisplay scoreDisplay;
-
+  HighscoreDisplay highscoreDisplay;
 
   FlySpawner spawner;
 
   int score;
 
-  GameLoop(){
+  final SharedPreferences storage;
+
+  GameLoop(this.storage){
     initialize();
   }
 
@@ -69,6 +73,7 @@ class GameLoop extends Game {
     helpButton = HelpButton(this);
     creditsButton = CreditsButton(this);
     scoreDisplay = ScoreDisplay(this);
+    highscoreDisplay = HighscoreDisplay(this);
   }
 
   void spawnFly() {
@@ -113,6 +118,7 @@ class GameLoop extends Game {
     }
     if (activeView == View.help) helpView.render(canvas);
     if (activeView == View.credits) creditsView.render(canvas);
+    highscoreDisplay.render(canvas);
   }
 
   void update(double t){
