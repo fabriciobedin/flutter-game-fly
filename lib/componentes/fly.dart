@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:fluttergamefly/componentes/callout.dart';
 import 'package:fluttergamefly/game_loop.dart';
@@ -73,6 +74,8 @@ class Fly {
   void onTapDown() {
     if (!isDead) {
       isDead = true;
+
+      Flame.audio.play('sfx/ouch${(gameLoop.rnd.nextInt(11) + 1).toString()}.ogg');
 
       if (gameLoop.activeView == View.playing) {
         gameLoop.score += 1;
