@@ -14,6 +14,7 @@ import 'package:fluttergamefly/componentes/help-button.dart';
 import 'package:fluttergamefly/componentes/house-fly.dart';
 import 'package:fluttergamefly/componentes/hungry-fly.dart';
 import 'package:fluttergamefly/componentes/macho-fly.dart';
+import 'package:fluttergamefly/componentes/score-display.dart';
 import 'package:fluttergamefly/componentes/start-button.dart';
 import 'package:fluttergamefly/controllers/spawner.dart';
 import 'package:fluttergamefly/view.dart';
@@ -39,8 +40,12 @@ class GameLoop extends Game {
   StartButton startButton;
   HelpButton helpButton;
   CreditsButton creditsButton;
+  ScoreDisplay scoreDisplay;
+
 
   FlySpawner spawner;
+
+  int score;
 
   GameLoop(){
     initialize();
@@ -51,6 +56,7 @@ class GameLoop extends Game {
     rnd = Random();
     resize(await Flame.util.initialDimensions());
 
+    score = 0;
     spawner = FlySpawner(this);
     homeView = HomeView(this);
     lostView = LostView(this);
@@ -62,6 +68,7 @@ class GameLoop extends Game {
     startButton = StartButton(this);
     helpButton = HelpButton(this);
     creditsButton = CreditsButton(this);
+    scoreDisplay = ScoreDisplay(this);
   }
 
   void spawnFly() {
@@ -91,6 +98,8 @@ class GameLoop extends Game {
 
     backyard.render(canvas);
 
+    if (activeView == View.playing) scoreDisplay.render(canvas);
+
     flies.forEach((fly) {
       fly.render(canvas);
     });
@@ -114,6 +123,8 @@ class GameLoop extends Game {
     });
 
     flies.removeWhere((fly) => fly.isOffScreen);
+
+    if (activeView == View.playing) scoreDisplay.update(t);
   }
 
   void resize(Size size) {
