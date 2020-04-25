@@ -39,7 +39,10 @@ class Callout {
       if (value <= 0) {
         fly.gameLoop.activeView = View.lost;
         if (value <= 0) {
-          Flame.audio.play('sfx/haha${(fly.gameLoop.rnd.nextInt(5) + 1).toString()}.ogg');
+          if (fly.gameLoop.soundButton.isEnabled) {
+            Flame.audio.play(
+                'sfx/haha${(fly.gameLoop.rnd.nextInt(5) + 1).toString()}.ogg');
+          }
           fly.gameLoop.activeView = View.lost;
         }
         fly.gameLoop.playHomeBGM();

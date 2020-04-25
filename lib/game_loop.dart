@@ -15,7 +15,9 @@ import 'package:fluttergamefly/componentes/highscore-display.dart';
 import 'package:fluttergamefly/componentes/house-fly.dart';
 import 'package:fluttergamefly/componentes/hungry-fly.dart';
 import 'package:fluttergamefly/componentes/macho-fly.dart';
+import 'package:fluttergamefly/componentes/music-button.dart';
 import 'package:fluttergamefly/componentes/score-display.dart';
+import 'package:fluttergamefly/componentes/sound-button.dart';
 import 'package:fluttergamefly/componentes/start-button.dart';
 import 'package:fluttergamefly/controllers/spawner.dart';
 import 'package:fluttergamefly/view.dart';
@@ -44,6 +46,8 @@ class GameLoop extends Game {
   StartButton startButton;
   HelpButton helpButton;
   CreditsButton creditsButton;
+  MusicButton musicButton;
+  SoundButton soundButton;
   ScoreDisplay scoreDisplay;
   HighscoreDisplay highscoreDisplay;
 
@@ -77,6 +81,8 @@ class GameLoop extends Game {
     startButton = StartButton(this);
     helpButton = HelpButton(this);
     creditsButton = CreditsButton(this);
+    musicButton = MusicButton(this);
+    soundButton = SoundButton(this);
     scoreDisplay = ScoreDisplay(this);
     highscoreDisplay = HighscoreDisplay(this);
 
@@ -140,9 +146,15 @@ class GameLoop extends Game {
       helpButton.render(canvas);
       creditsButton.render(canvas);
     }
+
     if (activeView == View.help) helpView.render(canvas);
     if (activeView == View.credits) creditsView.render(canvas);
-    highscoreDisplay.render(canvas);
+
+    if (activeView != View.help && activeView != View.credits) {
+      highscoreDisplay.render(canvas);
+      musicButton.render(canvas);
+      soundButton.render(canvas);
+    }
   }
 
   void update(double t){
@@ -202,9 +214,25 @@ class GameLoop extends Game {
       }
     });
 
+
+    // music button
+    if (musicButton.rect.contains(details.globalPosition)) {
+      musicButton.onTapDown();
+      return;
+    }
+
+    // sound button
+    if (soundButton.rect.contains(details.globalPosition)) {
+      soundButton.onTapDown();
+      return;
+    }
+
+
     if (activeView == View.playing && !didHitAFly) {
       activeView = View.lost;
-      Flame.audio.play('sfx/haha${(rnd.nextInt(5) + 1).toString()}.ogg');
+      if (soundButton.isEnabled) {
+        Flame.audio.play('sfx/haha${(rnd.nextInt(5) + 1).toString()}.ogg');
+      }
       activeView = View.lost;
       playHomeBGM();
     }

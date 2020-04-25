@@ -43,7 +43,7 @@ class HighscoreDisplay {
 
     position = Offset(
       game.screenSize.width - (game.tileSize * .25) - painter.width,
-      game.tileSize * .75,
+      game.tileSize * .25,
     );
   }
 
