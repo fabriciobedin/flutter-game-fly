@@ -31,6 +31,9 @@ void main() async {
     'sfx/ouch9.ogg',
     'sfx/ouch10.ogg',
     'sfx/ouch11.ogg',
+    'bgm/home.mp3',
+    'bgm/playing.mp3',
+    'sfx/haha1.ogg'
   ]);
 
   Flame.images.loadAll(<String>[

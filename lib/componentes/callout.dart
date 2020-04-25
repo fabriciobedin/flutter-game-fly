@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/painting.dart';
 import 'package:fluttergamefly/componentes/fly.dart';
@@ -37,6 +38,11 @@ class Callout {
       value = value - .2 * t;
       if (value <= 0) {
         fly.gameLoop.activeView = View.lost;
+        if (value <= 0) {
+          Flame.audio.play('sfx/haha${(fly.gameLoop.rnd.nextInt(5) + 1).toString()}.ogg');
+          fly.gameLoop.activeView = View.lost;
+        }
+        fly.gameLoop.playHomeBGM();
       }
     }
 

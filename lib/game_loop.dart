@@ -25,6 +25,8 @@ import 'package:fluttergamefly/view/home-view.dart';
 import 'package:fluttergamefly/view/lost-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:audioplayers/audioplayers.dart';
+
 class GameLoop extends Game {
   View activeView = View.home;
   Size screenSize;
@@ -51,6 +53,9 @@ class GameLoop extends Game {
 
   final SharedPreferences storage;
 
+  AudioPlayer homeBGM;
+  AudioPlayer playingBGM;
+
   GameLoop(this.storage){
     initialize();
   }
@@ -74,6 +79,25 @@ class GameLoop extends Game {
     creditsButton = CreditsButton(this);
     scoreDisplay = ScoreDisplay(this);
     highscoreDisplay = HighscoreDisplay(this);
+
+    homeBGM = await Flame.audio.loopLongAudio('bgm/home.mp3', volume: .25);
+    homeBGM.pause();
+    playingBGM = await Flame.audio.loopLongAudio('bgm/playing.mp3', volume: .25);
+    playingBGM.pause();
+
+    playHomeBGM();
+  }
+
+  void playHomeBGM() {
+    playingBGM.pause();
+    playingBGM.seek(Duration.zero);
+    homeBGM.resume();
+  }
+
+  void playPlayingBGM() {
+    homeBGM.pause();
+    homeBGM.seek(Duration.zero);
+    playingBGM.resume();
   }
 
   void spawnFly() {
@@ -180,6 +204,9 @@ class GameLoop extends Game {
 
     if (activeView == View.playing && !didHitAFly) {
       activeView = View.lost;
+      Flame.audio.play('sfx/haha${(rnd.nextInt(5) + 1).toString()}.ogg');
+      activeView = View.lost;
+      playHomeBGM();
     }
   }
 }
