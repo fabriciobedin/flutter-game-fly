@@ -1,5 +1,7 @@
 enum View {
   home,
   playing,
-  lost
+  lost,
+  help,
+  credits
 }
