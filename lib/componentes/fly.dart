@@ -34,15 +34,16 @@ class Fly {
   }
 
   void render(Canvas canvas){
-    if(isDead){
-      deadSprite.renderRect(canvas, flyRect.inflate(2));
+    if (isDead) {
+      deadSprite.renderRect(canvas, flyRect.inflate(flyRect.width / 2));
     } else {
-      flyingSprite[flyingSpriteIndex.toInt()].renderRect(canvas, flyRect.inflate(2));
-
+      flyingSprite[flyingSpriteIndex.toInt()].renderRect(canvas, flyRect.inflate(flyRect.width / 2));
       if (gameLoop.activeView == View.playing) {
         callout.render(canvas);
       }
     }
+
+//    canvas.drawRect(flyRect, Paint()..color = Color(0x88000000));
   }
   
   void update(double time) {
